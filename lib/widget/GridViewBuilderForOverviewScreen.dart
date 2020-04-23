@@ -23,12 +23,10 @@ class GridViewBuilderForOverviewScreen extends StatelessWidget {
     return GridView.builder(
       padding: EdgeInsets.all(10.0),
       itemCount: loadedProduct.length,
-      itemBuilder: (context, i) => ChangeNotifierProvider(
-        builder: (c) => loadedProduct[i],
+      itemBuilder: (context, i) => ChangeNotifierProvider.value(
+        value: loadedProduct[i],
         child:  ProductItem(
-        // id: loadedProduct[i].id,
-        // title: loadedProduct[i].title,
-        // imageUrl: loadedProduct[i].imageUrl,
+        
         ),
       ),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

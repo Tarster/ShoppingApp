@@ -15,11 +15,6 @@ import '../screen/product_detail_screen.dart';
 import '../model/product.dart';
 
 class ProductItem extends StatelessWidget {
-  // final String id;
-  // final String title;
-  // final String imageUrl;
-
-  // ProductItem({this.id, this.title, this.imageUrl});
 
   void onClickSendProductID(BuildContext context, String id) {
     Navigator.pushNamed(context, ProductDetailScreen.routeName, arguments: id);
