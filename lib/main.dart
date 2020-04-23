@@ -1,4 +1,13 @@
+//Package Level Imports
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+//Screen Imports
+import './screen/product_detail_screen.dart';
+import './screen/product_overview_screen.dart';
+
+//Provider Import
+import './providers/products_provider.dart';
 
 void main() => runApp(MyApp());
 
@@ -6,24 +15,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Shopping',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(),
-    );
-  }
-}
-
-
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('New App'),
-      ),
-      body: Center(child: Text('This is centerd Text'),),      
+    return ChangeNotifierProvider(
+      builder: (context) => ProductProvider(),
+      child: MaterialApp(
+        title: 'Shopping',
+        theme: ThemeData(
+          primarySwatch: Colors.amber,
+          accentColor: Colors.deepOrange,
+          fontFamily: 'Lato',
+        ),
+        routes: {
+          ProductOverviewScreen.routeName: (context) => ProductOverviewScreen(),
+          ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
+        },
+      ), 
+      //create: (BuildContext context) {},
     );
   }
 }
