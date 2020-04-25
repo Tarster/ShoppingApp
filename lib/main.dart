@@ -8,6 +8,8 @@ import './screen/product_overview_screen.dart';
 
 //Provider Import
 import './providers/products_provider.dart';
+import './providers/cart.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -15,8 +17,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value :ProductProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: ProductProvider()),
+        ChangeNotifierProvider.value(value: Cart())
+      ],
       child: MaterialApp(
         title: 'Shopping',
         theme: ThemeData(
@@ -28,7 +33,7 @@ class MyApp extends StatelessWidget {
           ProductOverviewScreen.routeName: (context) => ProductOverviewScreen(),
           ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
         },
-      ), 
+      ),
       //create: (BuildContext context) {},
     );
   }

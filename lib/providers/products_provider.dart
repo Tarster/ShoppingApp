@@ -39,6 +39,10 @@ List<Product> _item =[Product(
     ),
     ];
 
+List<Product> get fav{
+  return _item.where((item) => item.isFavourite == true).toList();
+}
+
 List<Product> get item{
   return [..._item];
 }

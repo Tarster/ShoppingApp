@@ -7,6 +7,7 @@ import './product_item.dart';
 
 //Provider Import
 import '../providers/products_provider.dart';
+//import '../providers/cart.dart';
 
 //Model Import
 import '../model/product.dart';
@@ -14,20 +15,23 @@ import '../model/product.dart';
 
 
 class GridViewBuilderForOverviewScreen extends StatelessWidget {
+  final bool selectFav;
+
+  GridViewBuilderForOverviewScreen(this.selectFav);
+  
   @override
   Widget build(BuildContext context) {
     
     final productProviderInstance = Provider.of<ProductProvider>(context);
-    List<Product> loadedProduct = productProviderInstance.item;
+    
+    List<Product> loadedProduct = selectFav ? productProviderInstance.fav : productProviderInstance.item;
     
     return GridView.builder(
       padding: EdgeInsets.all(10.0),
       itemCount: loadedProduct.length,
       itemBuilder: (context, i) => ChangeNotifierProvider.value(
         value: loadedProduct[i],
-        child:  ProductItem(
-        
-        ),
+        child:  ProductItem(),
       ),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
