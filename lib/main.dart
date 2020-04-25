@@ -5,11 +5,13 @@ import 'package:provider/provider.dart';
 //Screen Imports
 import './screen/product_detail_screen.dart';
 import './screen/product_overview_screen.dart';
+import './screen/cart_screen.dart';
+import './screen/order_screen.dart';
 
 //Provider Import
 import './providers/products_provider.dart';
 import './providers/cart.dart';
-
+import './providers/orders.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,7 +22,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: ProductProvider()),
-        ChangeNotifierProvider.value(value: Cart())
+        ChangeNotifierProvider.value(value: Cart()),
+        ChangeNotifierProvider.value(value: Orders())
       ],
       child: MaterialApp(
         title: 'Shopping',
@@ -32,6 +35,8 @@ class MyApp extends StatelessWidget {
         routes: {
           ProductOverviewScreen.routeName: (context) => ProductOverviewScreen(),
           ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
+          CartScreen.routeName:(context) =>CartScreen(), 
+          OrderScreen.routeName:(context)=>OrderScreen(),
         },
       ),
       //create: (BuildContext context) {},

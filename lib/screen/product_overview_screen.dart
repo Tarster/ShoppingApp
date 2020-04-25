@@ -5,6 +5,11 @@ import 'package:provider/provider.dart';
 //Widget Import
 import '../widget/GridViewBuilderForOverviewScreen.dart';
 import '../widget/badge.dart';
+import '../widget/drawer.dart';
+
+
+//Screen Imports
+import 'cart_screen.dart';
 
 //Provider Import
 import '../providers/cart.dart';
@@ -22,25 +27,27 @@ class ProductOverviewScreen extends StatefulWidget {
 }
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
-  var selectFav = false;
+  var _selectFav = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Shop'),
+        title: Text(_selectFav ?'Favourites':'My Shop'),
         actions: <Widget>[
           Consumer<Cart>(
             builder: (_, cart, child) =>
                 Badge(child: child, value: cart.itemcount.toString()),
-            child: IconButton(icon: Icon(Icons.shopping_cart), onPressed: (){}),
+            child: IconButton(icon: Icon(Icons.shopping_cart), onPressed: (){
+              Navigator.pushNamed(context, CartScreen.routeName);
+            }),
           ),
           PopupMenuButton(
             onSelected: (DisplayPopMenuButton selected) {
               setState(() {
                 if (selected == DisplayPopMenuButton.favourite)
-                  selectFav = true;
+                  _selectFav = true;
                 else
-                  selectFav = false;
+                  _selectFav = false;
               });
             },
             itemBuilder: (context) => [
@@ -63,7 +70,8 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
           ),
         ],
       ),
-      body: GridViewBuilderForOverviewScreen(selectFav),
+      drawer: DrawerWidget(),
+      body: GridViewBuilderForOverviewScreen(_selectFav),
     );
   }
 }
