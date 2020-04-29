@@ -2,8 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
-
 //Screen Imports
 import '../screen/edit_product_screen.dart';
 
@@ -15,7 +13,6 @@ import '../providers/products_provider.dart';
 //Widget Imports
 import '../widget/userProductItem.dart';
 import '../widget/drawer.dart';
-
 
 class UserProductScreen extends StatelessWidget {
   static const routeName = '/userProductScreen';
@@ -39,7 +36,10 @@ class UserProductScreen extends StatelessWidget {
         padding: EdgeInsets.all(8),
         child: ListView.builder(
           itemBuilder: (context, index) => UserProductItem(
-              product.item[index].title, product.item[index].imageUrl),
+              product.item[index].title,
+              product.item[index].imageUrl,
+              product.item[index].id,
+              ()=>product.deleteProduct(product.item[index].id)),
           itemCount: product.item.length,
         ),
       ),
