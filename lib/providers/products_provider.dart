@@ -53,7 +53,7 @@ class ProductProvider with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) {
-    const url = 'https://tarster-2c5a4.firebaseio.com/product';
+    const url = 'https://tarster-2c5a4.firebaseio.com/product.json';
     return http
         .post(url,
             body: json.encode({
@@ -73,9 +73,6 @@ class ProductProvider with ChangeNotifier {
           imageUrl: product.imageUrl);
       _item.add(newProduct);
       notifyListeners();
-    }).catchError((error){
-        print(error);
-        throw error;
     });
   }
 
@@ -91,3 +88,8 @@ class ProductProvider with ChangeNotifier {
     notifyListeners();
   }
 }
+
+// .catchError((error){
+//         print(error);
+//         throw error;
+//     })

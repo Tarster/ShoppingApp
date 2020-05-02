@@ -106,21 +106,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     else {
       Provider.of<ProductProvider>(context, listen: false)
           .addProduct(_editedproduct)
-          .catchError((error) {
-        showDialog(
-            context: context,
-            builder: (ctx) => AlertDialog(
-                  title: Text('Error had occured!'),
-                  content: Text(error.toString()),
-                  actions: <Widget>[
-                    FlatButton(
-                        onPressed: ()  {
-                          print('I am here');
-                          Navigator.of(ctx).pop();},
-                        child: Text('Okay'))
-                  ],
-                ));
-      }).then((_) {
+          .then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -249,8 +235,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           height: 100,
                           margin: EdgeInsets.only(
                               top: 8,
-                              right:
-                                  10), //TODO:Static margin convert to dynamic
+                              right:10,), //TODO:Static margin convert to dynamic
                           decoration: BoxDecoration(
                             border: Border.all(width: 1, color: Colors.grey),
                           ),
@@ -306,3 +291,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
     );
   }
 }
+
+
+// .catchError((error) {
+//             print(error.toString()+'In the edit screen');
+//         showDialog(
+//             context: context,
+//             builder: (ctx) => AlertDialog(
+//                   title: Text('Error had occured!'),
+//                   content: Text(error.toString()),
+//                   actions: <Widget>[
+//                     FlatButton(
+//                         onPressed: ()  {
+//                           print('I am here');
+//                           Navigator.of(ctx).pop();},
+//                         child: Text('Okay'))
+//                   ],
+//                 ));
+//       })
