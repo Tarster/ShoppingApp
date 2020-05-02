@@ -101,16 +101,37 @@ class _EditProductScreenState extends State<EditProductScreen> {
         _isLoading = false;
       });
       Navigator.of(context).pop();
-    } 
-    
-    else {
+    } else {
       Provider.of<ProductProvider>(context, listen: false)
           .addProduct(_editedproduct)
-          .then((_) {
+          .catchError((error) {
+        //print(error.toString());
+        return showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('There is an error'),
+            content: Text(error.toString()),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Okay'),
+                onPressed: () {
+                  //print('Onnclik');
+                  Navigator.of(ctx).pop();
+                  //print('clicked okey');
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ),
+        );
+      }).then((_) {
         setState(() {
-          _isLoading = false;
-        });
-        Navigator.of(context).pop();
+                    _isLoading = false;
+                  });
+                  Navigator.of(context).pop();
       });
     }
   }
@@ -191,7 +212,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           // print('price:'+_editedproduct.description);
                         },
                         onFieldSubmitted: (_) {
-                          FocusScope.of(context).requestFocus(_descriptionFocusNode);
+                          FocusScope.of(context)
+                              .requestFocus(_descriptionFocusNode);
                         },
                       ),
                     ),
@@ -234,8 +256,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           width: 100,
                           height: 100,
                           margin: EdgeInsets.only(
-                              top: 8,
-                              right:10,), //TODO:Static margin convert to dynamic
+                            top: 8,
+                            right: 10,
+                          ), //TODO:Static margin convert to dynamic
                           decoration: BoxDecoration(
                             border: Border.all(width: 1, color: Colors.grey),
                           ),
@@ -291,7 +314,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
     );
   }
 }
-
 
 // .catchError((error) {
 //             print(error.toString()+'In the edit screen');

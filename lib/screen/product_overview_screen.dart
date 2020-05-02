@@ -7,12 +7,12 @@ import '../widget/GridViewBuilderForOverviewScreen.dart';
 import '../widget/badge.dart';
 import '../widget/drawer.dart';
 
-
 //Screen Imports
 import 'cart_screen.dart';
 
 //Provider Import
 import '../providers/cart.dart';
+import '../providers/products_provider.dart';
 
 enum DisplayPopMenuButton {
   favourite,
@@ -28,18 +28,49 @@ class ProductOverviewScreen extends StatefulWidget {
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   var _selectFav = false;
+  var _isInit = true;
+  var _isLoading = false;
+
+  @override
+  void initState() {
+    // Provider.of<ProductProvider>(context).fetchAndSyncProducts();
+    // Future.delayed(Duration.zero).then((_){
+    //     Provider.of<ProductProvider>(context).fetchAndSyncProducts();
+    // });
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      _isInit = false;
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<ProductProvider>(context).fetchAndSyncProducts().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_selectFav ?'Favourites':'My Shop'),
+        title: Text(_selectFav ? 'Favourites' : 'My Shop'),
         actions: <Widget>[
           Consumer<Cart>(
             builder: (_, cart, child) =>
                 Badge(child: child, value: cart.itemcount.toString()),
-            child: IconButton(icon: Icon(Icons.shopping_cart), onPressed: (){
-              Navigator.pushNamed(context, CartScreen.routeName);
-            }),
+            child: IconButton(
+                icon: Icon(Icons.shopping_cart),
+                onPressed: () {
+                  Navigator.pushNamed(context, CartScreen.routeName);
+                }),
           ),
           PopupMenuButton(
             onSelected: (DisplayPopMenuButton selected) {
@@ -71,7 +102,9 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         ],
       ),
       drawer: DrawerWidget(),
-      body: GridViewBuilderForOverviewScreen(_selectFav),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : GridViewBuilderForOverviewScreen(_selectFav),
     );
   }
 }
