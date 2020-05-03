@@ -88,19 +88,20 @@ class _EditProductScreenState extends State<EditProductScreen> {
     super.dispose();
   }
 
-  void _saveForm() {
+  void _saveForm() async {
     _form.currentState.validate();
     _form.currentState.save();
     setState(() {
       _isLoading = true;
     });
     if (_editedproduct.id != null) {
-      Provider.of<ProductProvider>(context, listen: false)
-          .updateProduct(_editedproduct.id, _editedproduct);
-      setState(() {
-        _isLoading = false;
-      });
-      Navigator.of(context).pop();
+      try {
+        await Provider.of<ProductProvider>(context, listen: false)
+            .updateProduct(_editedproduct.id, _editedproduct);
+      } catch (error) {} 
+      // finally {
+        
+      // }
     } else {
       Provider.of<ProductProvider>(context, listen: false)
           .addProduct(_editedproduct)
@@ -127,13 +128,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
             ],
           ),
         );
-      }).then((_) {
-        setState(() {
-                    _isLoading = false;
-                  });
-                  Navigator.of(context).pop();
       });
+      // .then((_) {
+      //   setState(() {
+      //     _isLoading = false;
+      //   });
+      //   Navigator.of(context).pop();
+      // });
     }
+    setState(() {
+          _isLoading = false;
+        });
+        Navigator.of(context).pop();
   }
 
   @override

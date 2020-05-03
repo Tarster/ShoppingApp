@@ -32,15 +32,20 @@ class UserProductScreen extends StatelessWidget {
         ],
       ),
       drawer: DrawerWidget(),
-      body: Padding(
-        padding: EdgeInsets.all(8),
-        child: ListView.builder(
-          itemBuilder: (context, index) => UserProductItem(
-              product.item[index].title,
-              product.item[index].imageUrl,
-              product.item[index].id,
-              ()=>product.deleteProduct(product.item[index].id)),
-          itemCount: product.item.length,
+      body: RefreshIndicator(
+        onRefresh: () {
+          return Provider.of<ProductProvider>(context).fetchAndSyncProducts();
+        },
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: ListView.builder(
+            itemBuilder: (context, index) => UserProductItem(
+                product.item[index].title,
+                product.item[index].imageUrl,
+                product.item[index].id,
+                ),
+            itemCount: product.item.length,
+          ),
         ),
       ),
     );

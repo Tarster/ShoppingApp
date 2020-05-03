@@ -30,6 +30,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   var _selectFav = false;
   var _isInit = true;
   var _isLoading = false;
+  var _isNull =false;
 
   @override
   void initState() {
@@ -51,6 +52,15 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         setState(() {
           _isLoading = false;
         });
+      }).catchError((error){
+        
+        if(error.toString() =='Null')
+          {
+              setState(() {
+                _isNull =true;
+              });
+          }       
+        print('this is another error:'+error);
       });
     }
 
@@ -102,9 +112,14 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         ],
       ),
       drawer: DrawerWidget(),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : GridViewBuilderForOverviewScreen(_selectFav),
+      body: RefreshIndicator(
+              onRefresh: (){
+                  return Provider.of<ProductProvider>(context).fetchAndSyncProducts();
+              },
+              child: _isNull?Center(child: Text('There is no product in the server'),):_isLoading
+            ? Center(child: CircularProgressIndicator())
+            : GridViewBuilderForOverviewScreen(_selectFav),
+      ),
     );
   }
 }

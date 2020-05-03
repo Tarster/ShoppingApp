@@ -1,20 +1,23 @@
 //Package Level Imports
 import 'package:flutter/material.dart';
-//import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 
 //Screen Import
 import '../screen/edit_product_screen.dart';
+
+//Provider Import
+import '../providers/products_provider.dart';
 
 class UserProductItem extends StatelessWidget {
   final String title;
   final String imageUrl;
   final String id;
-  final Function deleteproduct;
 
-  UserProductItem(this.title, this.imageUrl,this.id,this.deleteproduct);
+  UserProductItem(this.title, this.imageUrl, this.id);
 
   @override
   Widget build(BuildContext context) {
+    final scaffold = Scaffold.of(context);
     return ListTile(
       title: Text(title),
       leading: CircleAvatar(
@@ -29,14 +32,25 @@ class UserProductItem extends StatelessWidget {
                 Icons.edit,
                 color: Colors.amberAccent,
               ),
-              onPressed: ()=>Navigator.of(context).pushNamed(EditProductScreen.routeName,arguments: id),
+              onPressed: () => Navigator.of(context)
+                  .pushNamed(EditProductScreen.routeName, arguments: id),
             ),
             IconButton(
               icon: Icon(
                 Icons.delete,
                 color: Theme.of(context).errorColor,
               ),
-              onPressed: deleteproduct,
+              onPressed: () async {
+                try {
+                  await Provider.of<ProductProvider>(context).deleteProduct(id);
+                } catch (error) {
+                  scaffold.showSnackBar(
+                    SnackBar(
+                      content: Text('Error Deleting Item'),
+                    ),
+                  );
+                }
+              },
             ),
           ],
         ),
