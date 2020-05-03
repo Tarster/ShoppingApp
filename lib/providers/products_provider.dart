@@ -12,6 +12,15 @@ class ProductProvider with ChangeNotifier {
     return _item.where((item) => item.isFavourite == true).toList();
   }
 
+  // Future<void> updateFavouriteOnServer()
+  // {
+  //   const url = 'https://tarster-2c5a4.firebaseio.com/product.json';
+  //   print(_item.where((item) => item.isFavourite == true).toList());
+      
+    
+  //   //http.patch(url,body:json.encode({}));
+  // }
+
   List<Product> get item {
     return [..._item];
   }

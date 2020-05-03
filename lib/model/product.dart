@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shopping_store/model/http_exception.dart';
 
-
-class Product with ChangeNotifier
-{
+class Product with ChangeNotifier {
   final String id;
   final String title;
   final String description;
@@ -16,13 +17,28 @@ class Product with ChangeNotifier
     @required this.description,
     @required this.price,
     @required this.imageUrl,
-    this.isFavourite =false,
+    this.isFavourite = false,
   });
 
-  void toggleFavouriteStatus()
-  {
-    isFavourite =!isFavourite;
+  Future<void> toggleFavouriteStatus() async {
+    var oldFavourite = isFavourite;
+    final url = 'https://tarster-2c5a4.firebaseio.com/product/$id.json';
+    isFavourite = !isFavourite;
     notifyListeners();
+    try {
+      final response = await http.patch(url,
+          body: json.encode({
+            'isFavourite': isFavourite,
+          }));
+      if (response.statusCode >= 400) {
+        isFavourite = oldFavourite;
+        notifyListeners();
+        throw HttpException('Error favourite Not modified');
+      }
+    } catch (error) {
+      isFavourite = oldFavourite;
+      notifyListeners();
+      throw HttpException('Error favourite Not modified');
+    }
   }
-
 }

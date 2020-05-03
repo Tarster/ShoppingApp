@@ -23,7 +23,7 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context);
-
+    final scaffold = Scaffold.of(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -38,13 +38,26 @@ class ProductItem extends StatelessWidget {
           backgroundColor: Colors.black87,
           leading: Consumer<Product>(
             builder: (context, product, child) => IconButton(
-                icon: Icon(product.isFavourite
-                    ? Icons.favorite
-                    : Icons.favorite_border),
-                color: Theme.of(context).accentColor,
-                onPressed: () {
-                  product.toggleFavouriteStatus();
-                }),
+              icon: Icon(
+                  product.isFavourite ? Icons.favorite : Icons.favorite_border),
+              color: Theme.of(context).accentColor,
+              onPressed: () async {
+                try {
+                  await product.toggleFavouriteStatus();
+                } catch (error) {
+                  scaffold.hideCurrentSnackBar();
+                  scaffold.showSnackBar(
+                    SnackBar(
+                      duration: Duration(seconds: 1),
+                      content: Text(
+                        error.toString(),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                }
+              },
+            ),
           ),
           title: Text(
             product.title,
@@ -59,10 +72,13 @@ class ProductItem extends StatelessWidget {
                 Scaffold.of(context).showSnackBar(SnackBar(
                   content: Text(product.title),
                   duration: Duration(seconds: 2),
-                  action: SnackBarAction(label: 'UNDO',onPressed: (){
-                    //print('Undo clicked');
-                    cart.removeSingleItem(product.id);
-                  },),
+                  action: SnackBarAction(
+                    label: 'UNDO',
+                    onPressed: () {
+                      //print('Undo clicked');
+                      cart.removeSingleItem(product.id);
+                    },
+                  ),
                 ));
               }),
         ),
