@@ -17,10 +17,10 @@ import '../widget/cart_items.dart' as ci;
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/CartScreen';
-  
+
   @override
   Widget build(BuildContext context) {
-    var cart =Provider.of<Cart>(context);
+    var cart = Provider.of<Cart>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Cart'),
@@ -52,9 +52,22 @@ class CartScreen extends StatelessWidget {
                     ),
                   ),
                   FlatButton(
-                    onPressed: () {
-                      Provider.of<Orders>(context).addOrders(context, cart.item.values.toList(), cart.totalAmount);
-                    },
+                    onPressed: cart.totalAmount <= 0
+                        ? null
+                        : () async {
+                            try {
+                              Provider.of<Orders>(context).addOrders(context,
+                                  cart.item.values.toList(), cart.totalAmount);
+                            } catch (error) {
+                              final scaffold = Scaffold.of(context);
+                              scaffold.removeCurrentSnackBar();
+                              scaffold.showSnackBar(
+                                SnackBar(
+                                  content: Text('Error Placing Order'),
+                                ),
+                              );
+                            }
+                          },
                     child: Text(
                       'ORDER NOW',
                     ),

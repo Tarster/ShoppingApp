@@ -4,16 +4,31 @@ import 'package:provider/provider.dart';
 
 
 //Widget Import
-import '../widget/OrderItem.dart';
+import '../widget/OrderItem.dart'as ot;
 import '../widget/drawer.dart';
 // //Screen Imports
 // import 'cart_screen.dart';
 
 //Provider Import
-import '../providers/orders.dart' show Orders;
+import '../providers/orders.dart';
+//import '../providers/orders.dart';
 
-class OrderScreen extends StatelessWidget {
+
+class OrderScreen extends StatefulWidget {
   static const routeName = '/Orders';
+
+  @override
+  _OrderScreenState createState() => _OrderScreenState();
+}
+
+class _OrderScreenState extends State<OrderScreen> {
+  @override
+  void initState() {
+    Future.delayed(Duration.zero).then((_){
+      Provider.of<Orders>(context,listen: false).fetchAndSyncOrders();
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final orderData = Provider.of<Orders>(context);
@@ -24,7 +39,7 @@ class OrderScreen extends StatelessWidget {
       drawer: DrawerWidget(),
       body: ListView.builder(
           itemCount: orderData.orders.length,
-          itemBuilder: (context, index) => OrderItem(orderData.orders[index])),
+          itemBuilder: (context, index) => ot.OrderItem(orderData.orders[index])),
     );
   }
 }
