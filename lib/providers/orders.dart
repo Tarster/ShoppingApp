@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:shopping_store/model/product.dart';
 import 'dart:convert';
 
 import '../model/http_exception.dart';
@@ -33,7 +32,6 @@ class Orders with ChangeNotifier {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<OrderItem> loadedOrders = [];
-      var loadedProduct;
       if (extractedData == null) throw HttpException('Null');
 
       extractedData.forEach((orderId, orderData) {
