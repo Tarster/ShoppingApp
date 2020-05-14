@@ -20,7 +20,7 @@ enum DisplayPopMenuButton {
 }
 
 class ProductOverviewScreen extends StatefulWidget {
-  static const String routeName = '/';
+  static const String routeName = '/ProductOverViewScreen';
 
   @override
   _ProductOverviewScreenState createState() => _ProductOverviewScreenState();
