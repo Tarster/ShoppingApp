@@ -53,6 +53,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
           _isLoading = false;
         });
       }).catchError((error){
+        print(error.toString());
         
         if(error.toString() =='Null')
           {
@@ -116,7 +117,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
               onRefresh: (){
                   return Provider.of<ProductProvider>(context).fetchAndSyncProducts();
               },
-              child: _isNull?Center(child: Text('There is no product in the server'),):_isLoading
+              child: _isNull ? Center(child: Text('There is no product in the server'),):_isLoading
             ? Center(child: CircularProgressIndicator())
             : GridViewBuilderForOverviewScreen(_selectFav),
       ),
