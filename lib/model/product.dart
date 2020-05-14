@@ -22,7 +22,7 @@ class Product with ChangeNotifier {
 
   Future<void> toggleFavouriteStatus() async {
     var oldFavourite = isFavourite;
-    final url = 'https://tarster-2c5a4.firebaseio.com/product/$id.json';
+    final url = 'https://tarster-2c5a4.firebaseio.com/product/$id.json?auth=$authToken';
     isFavourite = !isFavourite;
     notifyListeners();
     try {
