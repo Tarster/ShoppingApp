@@ -10,6 +10,7 @@ import '../screen/product_detail_screen.dart';
 
 //Provider Import
 import '../providers/cart.dart';
+import '../providers/auth.dart';
 
 //Model Import
 import '../model/product.dart';
@@ -23,7 +24,9 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context);
+    final authData = Provider.of<Auth>(context);
     final scaffold = Scaffold.of(context);
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -43,7 +46,7 @@ class ProductItem extends StatelessWidget {
               color: Theme.of(context).accentColor,
               onPressed: () async {
                 try {
-                  await product.toggleFavouriteStatus();
+                  await product.toggleFavouriteStatus(authData.token);
                 } catch (error) {
                   scaffold.hideCurrentSnackBar();
                   scaffold.showSnackBar(
