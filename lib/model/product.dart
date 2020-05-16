@@ -20,16 +20,16 @@ class Product with ChangeNotifier {
     this.isFavourite = false,
   });
 
-  Future<void> toggleFavouriteStatus(String token) async {
+  Future<void> toggleFavouriteStatus(String token,String userId) async {
     var oldFavourite = isFavourite;
-    final url = 'https://tarster-2c5a4.firebaseio.com/product/$id.json?auth=$token';
+    final url = 'https://tarster-2c5a4.firebaseio.com/UserFavourites/$userId/$id.json?auth=$token';
     isFavourite = !isFavourite;
     notifyListeners();
     try {
-      final response = await http.patch(url,
-          body: json.encode({
-            'isFavourite': isFavourite,
-          }));
+      final response = await http.put(url,
+          body: json.encode(
+            isFavourite,
+          ));
       if (response.statusCode >= 400) {
         isFavourite = oldFavourite;
         notifyListeners();

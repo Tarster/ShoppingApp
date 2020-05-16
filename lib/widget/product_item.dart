@@ -46,7 +46,7 @@ class ProductItem extends StatelessWidget {
               color: Theme.of(context).accentColor,
               onPressed: () async {
                 try {
-                  await product.toggleFavouriteStatus(authData.token);
+                  await product.toggleFavouriteStatus(authData.token,authData.userID);
                 } catch (error) {
                   scaffold.hideCurrentSnackBar();
                   scaffold.showSnackBar(
