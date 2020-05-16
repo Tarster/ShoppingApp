@@ -10,6 +10,10 @@ class Auth with ChangeNotifier {
   DateTime _expiryDate;
   String _userId;
 
+  String get userID{
+    return _userId;
+  }
+
   bool get isAuth {
     return token != null;
   }
@@ -37,13 +41,15 @@ class Auth with ChangeNotifier {
       if (responseData['error'] != null) {
         throw HttpException(responseData['error']['message']);
       }
+      //print(responseData);
       _token = responseData['idToken'];
-      _userId = responseData['localID'];
+      _userId = responseData['localId'];
+      //print(_userId);
       _expiryDate = DateTime.now()
           .add(Duration(seconds: int.parse(responseData['expiresIn'])));
       notifyListeners();
     } catch (error) {
-      print(error.toString());
+      //print(error.toString());
       throw error;
     }
   }

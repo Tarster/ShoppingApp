@@ -30,7 +30,8 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   var _selectFav = false;
   var _isInit = true;
   var _isLoading = false;
-  var _isNull =false;
+  var _isNull = false;
+  var _errorText ='Default Error Text';
 
   @override
   void initState() {
@@ -42,27 +43,63 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   }
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     if (_isInit) {
       _isInit = false;
+
       setState(() {
         _isLoading = true;
       });
-      Provider.of<ProductProvider>(context).fetchAndSyncProducts().then((_) {
+
+      try {
+        await Provider.of<ProductProvider>(context).fetchAndSyncProducts();
         setState(() {
           _isLoading = false;
         });
-      }).catchError((error){
+      } catch (error) {
         print(error.toString());
+         if (error.toString() == 'NULL') {
+          setState(() {
+            _isNull = true;
+            _errorText ='No Product in the Store';
+          });
         
-        if(error.toString() =='Null')
-          {
-              setState(() {
-                _isNull =true;
-              });
-          }       
-        print('this is another error:'+error);
-      });
+        }
+
+        else{
+         setState(() {
+            _isNull = false;
+            _errorText =error.toString();
+          });}
+
+          showDialog(
+          context: context, builder: (ctx) => AlertDialog(
+            title: Text('There is an Error!'),
+            content: Text(_errorText),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Okay'),
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                  setState(() {
+                    _isLoading = false;
+                  });
+                },
+              )
+            ],
+          ),
+        );  
+      } 
+      // catch (error) {
+      //   print(error.toString());
+
+      //   if (error.toString() == 'Null') {
+      //     setState(() {
+      //       _isNull = true;
+      //     });
+      //   }
+      //   print('this is another error:' + error);
+      // }
     }
 
     super.didChangeDependencies();
@@ -114,12 +151,16 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
       ),
       drawer: DrawerWidget(),
       body: RefreshIndicator(
-              onRefresh: (){
-                  return Provider.of<ProductProvider>(context).fetchAndSyncProducts();
-              },
-              child: _isNull ? Center(child: Text('There is no product in the server'),):_isLoading
-            ? Center(child: CircularProgressIndicator())
-            : GridViewBuilderForOverviewScreen(_selectFav),
+        onRefresh: () {
+          return Provider.of<ProductProvider>(context).fetchAndSyncProducts();
+        },
+        child: _isNull
+            ? Center(
+                child: Text('There is no product in the server'),
+              )
+            : _isLoading
+                ? Center(child: CircularProgressIndicator())
+                : GridViewBuilderForOverviewScreen(_selectFav),
       ),
     );
   }

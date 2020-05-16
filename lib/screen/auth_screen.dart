@@ -141,7 +141,7 @@ class _AuthCardState extends State<AuthCard> {
         );
       }
     } on HttpException catch (error) {
-      print('I am in on catch'); 
+      //print('I am in on catch'); 
       var errorMessage = 'Authentication failed';
       if (error.toString().contains('INVALID_EMAIL')) {
         errorMessage = 'This is not a valid Email.';
