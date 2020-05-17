@@ -49,7 +49,11 @@ class DrawerWidget extends StatelessWidget {
             ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
-            onTap: () => auth.logout(),
+            onTap: () {
+              auth.logout();
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed('/');
+            },
             ),
           ),
         ],
