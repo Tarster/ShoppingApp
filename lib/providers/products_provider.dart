@@ -32,9 +32,10 @@ class ProductProvider with ChangeNotifier {
     return _item.firstWhere((item) => item.id == id);
   }
 
-  Future<void> fetchAndSyncProducts() async {
+  Future<void> fetchAndSyncProducts([bool filterStatus =false]) async {
+    final filterString = filterStatus ?'&orderBy="creatorId"&equalTo="$userId':'';
     var url =
-        'https://tarster-2c5a4.firebaseio.com/product.json?auth=$authToken&orderBy="creatorId"&equalTo="$userId"';
+        'https://tarster-2c5a4.firebaseio.com/product.json?auth=$authToken$filterString"';
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;

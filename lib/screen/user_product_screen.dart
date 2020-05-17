@@ -16,9 +16,15 @@ import '../widget/drawer.dart';
 
 class UserProductScreen extends StatelessWidget {
   static const routeName = '/userProductScreen';
+
+  Future<void> _refreshProducts(BuildContext context) async {
+    await Provider.of<ProductProvider>(context, listen: false)
+        .fetchAndSyncProducts(true);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<ProductProvider>(context);
+    //final product = Provider.of<ProductProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Products'),
@@ -32,19 +38,24 @@ class UserProductScreen extends StatelessWidget {
         ],
       ),
       drawer: DrawerWidget(),
-      body: RefreshIndicator(
-        onRefresh: () {
-          return Provider.of<ProductProvider>(context).fetchAndSyncProducts();
-        },
-        child: Padding(
-          padding: EdgeInsets.all(8),
-          child: ListView.builder(
-            itemBuilder: (context, index) => UserProductItem(
-                product.item[index].title,
-                product.item[index].imageUrl,
-                product.item[index].id,
+      body: FutureBuilder(
+        future: _refreshProducts(context),
+        builder: (context, snapshot) => snapshot.connectionState ==ConnectionState.waiting ? 
+        Center(child: CircularProgressIndicator()):RefreshIndicator(
+          onRefresh: () => _refreshProducts(context),
+          child: Consumer<ProductProvider>(
+            
+                      builder:(context,product,_)=> Padding(
+              padding: EdgeInsets.all(8),
+              child: ListView.builder(
+                itemBuilder: (context, index) => UserProductItem(
+                  product.item[index].title,
+                  product.item[index].imageUrl,
+                  product.item[index].id,
                 ),
-            itemCount: product.item.length,
+                itemCount: product.item.length,
+              ),
+            ),
           ),
         ),
       ),
