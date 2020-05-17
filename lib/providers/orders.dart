@@ -22,17 +22,18 @@ class OrderItem {
 }
 
 class Orders with ChangeNotifier {
-
   List<OrderItem> _orders = [];
 
   final String authToken;
+  final String userId;
 
-  Orders(this.authToken,this._orders);
+  Orders(this.authToken, this.userId, this._orders);
 
   List<OrderItem> get orders => [..._orders];
 
   Future<void> fetchAndSyncOrders() async {
-    final url = 'https://tarster-2c5a4.firebaseio.com/Orders.json?auth=$authToken';
+    final url =
+        'https://tarster-2c5a4.firebaseio.com/Orders/$userId.json?auth=$authToken';
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -52,19 +53,25 @@ class Orders with ChangeNotifier {
                   price: productData['price']))
               .toList(),
         ));
-
         _orders = loadedOrders;
         notifyListeners();
       });
     } catch (error) {
       //print(error.toString());
-      throw error;
+     if(error.toString()=='Null')
+     {
+       _orders =[];
+     }
+     else{
+      print('Some other error occured');
+     }
     }
   }
 
   Future<void> addOrders(
       BuildContext context, List<CartItem> cartproducts, double total) async {
-    final url = 'https://tarster-2c5a4.firebaseio.com/Orders.json?auth=$authToken';
+    final url =
+        'https://tarster-2c5a4.firebaseio.com/Orders/$userId.json?auth=$authToken';
     try {
       final response = await http.post(url,
           body: json.encode({
