@@ -1,11 +1,14 @@
 //Package Level Imports
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //Screen Imports
 import '../screen/order_screen.dart';
 import '../screen/product_overview_screen.dart';
 import '../screen/user_product_screen.dart';
 
+//Provider Import
+import '../providers/auth.dart';
 
 class DrawerWidget extends StatelessWidget {
   @override
@@ -23,8 +26,8 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.shop),
             title: Text('Shop'),
-            onTap: () =>
-                Navigator.pushReplacementNamed(context, ProductOverviewScreen.routeName),
+            onTap: () => Navigator.pushReplacementNamed(
+                context, ProductOverviewScreen.routeName),
           ),
           Divider(),
           ListTile(
@@ -37,9 +40,22 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.star),
             title: Text('Manage Items'),
-            onTap: () =>
-                Navigator.pushReplacementNamed(context, UserProductScreen.routeName),
-          )
+            onTap: () => Navigator.pushReplacementNamed(
+                context, UserProductScreen.routeName),
+          ),
+          Divider(),
+          Consumer<Auth>(
+            builder:(context,auth,_) =>
+            ListTile(
+            leading: Icon(Icons.exit_to_app),
+            title: Text('Logout'),
+            onTap: () {
+              auth.logout();
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed('/');
+            },
+            ),
+          ),
         ],
       ),
     );
