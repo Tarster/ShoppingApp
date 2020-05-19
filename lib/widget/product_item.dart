@@ -32,9 +32,13 @@ class ProductItem extends StatelessWidget {
       child: GridTile(
         child: GestureDetector(
           onTap: () => onClickSendProductID(context, product.id),
-          child: Image.network(
-            product.imageUrl,
-            fit: BoxFit.cover,
+          child: Hero(
+            tag: product.id,
+            child: FadeInImage(
+              placeholder: AssetImage('assets/images/product-placeholder.png'),
+              image: NetworkImage(product.imageUrl),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         footer: GridTileBar(
@@ -46,7 +50,8 @@ class ProductItem extends StatelessWidget {
               color: Theme.of(context).accentColor,
               onPressed: () async {
                 try {
-                  await product.toggleFavouriteStatus(authData.token,authData.userID);
+                  await product.toggleFavouriteStatus(
+                      authData.token, authData.userID);
                 } catch (error) {
                   scaffold.hideCurrentSnackBar();
                   scaffold.showSnackBar(
