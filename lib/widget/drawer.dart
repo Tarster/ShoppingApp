@@ -10,6 +10,8 @@ import '../screen/user_product_screen.dart';
 //Provider Import
 import '../providers/auth.dart';
 
+import '../helpers/custom_route.dart';
+
 class DrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -33,8 +35,8 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.payment),
             title: Text('Orders'),
-            onTap: () =>
-                Navigator.pushReplacementNamed(context, OrderScreen.routeName),
+            onTap: () =>Navigator.of(context).pushReplacement(CustomRoute(builder: (context)=>OrderScreen()),),
+                //Navigator.pushReplacementNamed(context, OrderScreen.routeName),
           ),
           Divider(),
           ListTile(

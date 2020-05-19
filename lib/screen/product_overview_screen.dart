@@ -46,19 +46,21 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   void didChangeDependencies() async {
     if (_isInit) {
       _isInit = false;
-
+      if (!mounted) return;
       setState(() {
         _isLoading = true;
       });
 
       try {
         await Provider.of<ProductProvider>(context).fetchAndSyncProducts();
+        if (!mounted) return;
         setState(() {
           _isLoading = false;
         });
       } catch (error) {
         print(error.toString());
          if (error.toString() == 'NULL') {
+          if (!mounted) return;
           setState(() {
             _isNull = true;
             _errorText ='No Product in the Store';
@@ -67,6 +69,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         }
 
         else{
+          if (!mounted) return;
          setState(() {
             _isNull = false;
             _errorText =error.toString();
@@ -81,6 +84,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
                 child: Text('Okay'),
                 onPressed: () {
                   Navigator.of(ctx).pop();
+                  if (!mounted) return;
                   setState(() {
                     _isLoading = false;
                   });

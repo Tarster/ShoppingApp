@@ -9,7 +9,7 @@ import '../model/http_exception.dart';
 enum AuthMode { Signup, Login }
 
 class AuthScreen extends StatelessWidget {
-  static const routeName = '/auth';
+  static const routeName = 'auth';
 
   @override
   Widget build(BuildContext context) {
