@@ -1,7 +1,7 @@
 //Package Level Imports
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_store/helpers/custom_route.dart';
+//import 'package:shopping_store/helpers/custom_route.dart';
 
 //Screen Imports
 import './screen/product_detail_screen.dart';
@@ -48,12 +48,13 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.amber,
             accentColor: Colors.deepOrange,
             fontFamily: 'Lato',
-            pageTransitionsTheme: PageTransitionsTheme(builders: {
-              TargetPlatform.android:CustomPageTransitionBuilder(),
-              TargetPlatform.iOS:CustomPageTransitionBuilder(),
-            },)
+            // pageTransitionsTheme: PageTransitionsTheme(builders: {
+            //   TargetPlatform.android:CustomPageTransitionBuilder(),
+            //   TargetPlatform.iOS:CustomPageTransitionBuilder(),
+            // },
+            // )
           ),
-          initialRoute: ProductOverviewScreen.routeName,
+          //initialRoute: ProductOverviewScreen.routeName,
           home: auth.isAuth
               ? ProductOverviewScreen()
               : FutureBuilder(
